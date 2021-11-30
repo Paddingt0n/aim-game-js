@@ -2,6 +2,9 @@
 let $start = document.querySelector("#start");
 let $game = document.querySelector("#game");
 let $time = document.querySelector("#time");
+let $result = document.querySelector("#result");
+let $timeHeader = document.querySelector("#time-header");
+let $resultHeader = document.querySelector("#result-header");
 
 let score = 0;
 let isGameStarted = false;
@@ -12,6 +15,11 @@ $game.addEventListener("click", handleBoxClick);
 
 // старт игры
 function startGame() {
+  score = 0;
+  setGameTime();
+  isGameStarted = true;
+  $timeHeader.classList.remove("hide");
+  $resultHeader.classList.add("hide");
   isGameStarted = true;
   $game.style.backgroundColor = "#fff";
   $start.classList.add("hide");
@@ -31,8 +39,23 @@ function startGame() {
   renderBox();
 }
 
+function setGameScore() {
+  $result.textContent = score.toString();
+}
+
+function setGameTime() {
+  let time = 5;
+  $time.textContent = time.toFixed(1);
+}
+
 function endGame() {
   isGameStarted = false;
+  setGameScore();
+  $start.classList.remove("hide");
+  $game.innerHTML = "";
+  $game.style.backgroundColor = "#ccc";
+  $timeHeader.classList.add("hide");
+  $resultHeader.classList.remove("hide");
 }
 
 function handleBoxClick(event) {
@@ -48,21 +71,18 @@ function handleBoxClick(event) {
 
 // создание квадрата
 function renderBox() {
-  console.log(getRandom(30, 100));
   $game.innerHTML = ""; // очищает поле от предыдущих объектов
-  let box = document.createElement("div");
-  let boxSize = getRandom(30, 100);
-  let gameSize = $game.getBoundingClientRect();
-  let maxTop = gameSize.height - boxSize;
-  let maxleft = gameSize.width - boxSize;
-  console.log(gameSize);
+  var box = document.createElement("div");
+  var boxSize = getRandom(30, 100);
+  var gameSize = $game.getBoundingClientRect();
+  var maxTop = gameSize.height - boxSize;
+  var maxLeft = gameSize.width - boxSize;
 
   box.style.height = box.style.width = boxSize + "px";
   box.style.position = "absolute";
   box.style.backgroundColor = "#000";
-  box.style.borderRadius = "50%";
   box.style.top = getRandom(0, maxTop) + "px";
-  box.style.left = getRandom(0, maxleft) + "px";
+  box.style.left = getRandom(0, maxLeft) + "px";
   box.style.cursor = "pointer";
   box.setAttribute("data-box", "true");
 
