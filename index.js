@@ -1,8 +1,10 @@
 // получение элекментов страницы
-var $start = document.querySelector("#start");
-var $game = document.querySelector("#game");
+let $start = document.querySelector("#start");
+let $game = document.querySelector("#game");
+let $time = document.querySelector("#time");
 
-var score = 0;
+let score = 0;
+let isGameStarted = false;
 
 // обработчики события (клик)
 $start.addEventListener("click", startGame);
@@ -10,13 +12,34 @@ $game.addEventListener("click", handleBoxClick);
 
 // старт игры
 function startGame() {
+  isGameStarted = true;
   $game.style.backgroundColor = "#fff";
   $start.classList.add("hide");
+
+  let interval = setInterval(function () {
+    let time = parseFloat($time.textContent);
+
+    if (time <= 0) {
+      clearInterval(interval);
+      endGame();
+    } else {
+      $time.textContent = (time - 0.1).toFixed(1); // toFixed уберает все знаки кроме 1
+    }
+    console.log("interval", $time.textContent);
+  }, 100);
 
   renderBox();
 }
 
+function endGame() {
+  isGameStarted = false;
+}
+
 function handleBoxClick(event) {
+  if (!isGameStarted) {
+    return;
+  }
+
   if (event.target.dataset.box) {
     score++;
     renderBox();
@@ -46,7 +69,7 @@ function renderBox() {
   $game.insertAdjacentElement("afterbegin", box);
 }
 
-// функция генерации рандомных значений для ширны и высоты квадрата
+// функция генерации рандомных значений
 function getRandom(min, max) {
   return Math.floor(Math.random() * (max - min) + min);
 }
