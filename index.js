@@ -25,20 +25,28 @@ function handleBoxClick(event) {
 
 // создание квадрата
 function renderBox() {
-  $game.innerHTML = ""; // очщает поле от предыдущих объектов
-  var box = document.createElement("div");
+  console.log(getRandom(30, 100));
+  $game.innerHTML = ""; // очищает поле от предыдущих объектов
+  let box = document.createElement("div");
+  let boxSize = getRandom(30, 100);
+  let gameSize = $game.getBoundingClientRect();
+  let maxTop = gameSize.height - boxSize;
+  let maxleft = gameSize.width - boxSize;
+  console.log(gameSize);
 
-  box.style.height = box.style.width = "50px";
+  box.style.height = box.style.width = boxSize + "px";
   box.style.position = "absolute";
   box.style.backgroundColor = "#000";
-  box.style.top = "50px";
-  box.style.left = "70px";
+  box.style.borderRadius = "50%";
+  box.style.top = getRandom(0, maxTop) + "px";
+  box.style.left = getRandom(0, maxleft) + "px";
   box.style.cursor = "pointer";
   box.setAttribute("data-box", "true");
 
   $game.insertAdjacentElement("afterbegin", box);
 }
 
+// функция генерации рандомных значений для ширны и высоты квадрата
 function getRandom(min, max) {
-  return;
+  return Math.floor(Math.random() * (max - min) + min);
 }
